@@ -1,0 +1,67 @@
+name: uwview
+title: UwView
+base: core24
+version: '1.7.3.6'
+summary: Open and search huge text and log files — a GUI and the uvf command
+description: |
+  UwView is a viewer and search tool for huge text and log files, with a GUI
+  and a command line (uvf) that share one engine.
+
+  * Open a file and scroll to the end at once. The file is never loaded into
+    memory; only the visible lines are drawn. Verified up to 258 GB /
+    4.5 billion lines in a single file.
+  * uvf searches many files in one run, plain text and seven compressed
+    formats mixed (gz, bz2, xz, lzma, zst, lz4, br), with no external
+    commands. Add -open and the hits appear in the window as
+    file-number:line; double-click to read around a hit.
+  * Encoding auto-detection (UTF-8, Shift_JIS, EUC-JP, UTF-16), bookmarks
+    remembered per file, keyboard shortcuts, real-time tail.
+
+  Run the command as `uwview.uvf` (or set `sudo snap alias uwview.uvf uvf`).
+  The snap reads files in your home folder. For removable media (/media,
+  /mnt), run `sudo snap connect uwview:removable-media`. Files elsewhere,
+  such as /var/log, are not reachable from the snap; copy them under your
+  home folder first.
+
+  Free for personal and internal company use under the PolyForm Internal Use
+  License 1.0.0. Source: https://github.com/amru195704/UwView
+grade: stable
+confinement: strict
+license: Proprietary
+website: https://uvp.y42u.net/en/
+source-code: https://github.com/amru195704/UwView
+issues: https://github.com/amru195704/UwView/issues
+icon: snap/gui/uwview.png
+
+platforms:
+  amd64:
+  arm64:
+
+parts:
+  uwview:
+    plugin: dump
+    # GitHub Releases の Linux 版をそのまま詰める（ビルドはしない）
+    source:
+      - on amd64: https://github.com/amru195704/UwView/releases/download/v1.7.3.6/UwView-1.7.3.6-linux-x86_64.tar.gz
+      - on arm64: https://github.com/amru195704/UwView/releases/download/v1.7.3.6/UwView-1.7.3.6-linux-aarch64.tar.gz
+    source-type: tar
+    organize:
+      UwView.Desktop: opt/uwview/UwView.Desktop
+      uvf: opt/uwview/uvf
+    stage-packages:
+      - libicu74
+      - libx11-6
+      - libice6
+      - libsm6
+      - libfontconfig1
+
+apps:
+  uwview:
+    command: opt/uwview/UwView.Desktop
+    extensions: [gnome]
+    plugs: [home, removable-media]
+  uvf:
+    # uvf -open は、同じフォルダの UwView.Desktop を起動する。画面が出るよう uvf にも gnome を付ける
+    command: opt/uwview/uvf
+    extensions: [gnome]
+    plugs: [home, removable-media]

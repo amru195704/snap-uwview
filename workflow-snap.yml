@@ -1,0 +1,28 @@
+# UwView の snap を amd64 と arm64 で作り、Snap Store の edge に出す。
+# 出したあと、stable への昇格は snapcraft.io のダッシュボード（Releases）で行う。
+# 必要な secret: SNAPCRAFT_STORE_CREDENTIALS（README の手順で作る）
+name: snap
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+jobs:
+  build:
+    strategy:
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: snapcore/action-build@v1
+        id: build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: snap-${{ matrix.runner }}
+          path: ${{ steps.build.outputs.snap }}
+      - uses: snapcore/action-publish@v1
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge

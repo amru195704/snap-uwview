@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=UwView
+GenericName=Large Text and Log Viewer
+GenericName[ja]=大容量テキスト・ログビューア
+Comment=Open and search huge text and log files
+Comment[ja]=巨大なテキスト・ログを開いて探す
+Exec=uwview %F
+Icon=${SNAP}/meta/gui/uwview.png
+Terminal=false
+Categories=Utility;TextTools;Development;
+MimeType=text/plain;
+Keywords=log;viewer;grep;search;text;
