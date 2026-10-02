@@ -4,27 +4,36 @@ base: core24
 version: '1.7.3.6'
 summary: Open and search huge text and log files — a GUI and the uvf command
 description: |
-  UwView is a viewer and search tool for huge text and log files, with a GUI
-  and a command line (uvf) that share one engine.
+  UwView is a viewer and search tool for huge text and log files, with a GUI and a command line (uvf) that share one engine.
 
-  * Open a file and scroll to the end at once. The file is never loaded into
-    memory; only the visible lines are drawn. Verified up to 258 GB /
-    4.5 billion lines in a single file.
-  * uvf searches many files in one run, plain text and seven compressed
-    formats mixed (gz, bz2, xz, lzma, zst, lz4, br), with no external
-    commands. Add -open and the hits appear in the window as
-    file-number:line; double-click to read around a hit.
-  * Encoding auto-detection (UTF-8, Shift_JIS, EUC-JP, UTF-16), bookmarks
-    remembered per file, keyboard shortcuts, real-time tail.
+  * Open a file and scroll to the end at once. The file is never loaded into memory; only the visible lines are drawn. Verified up to 258 GB / 4.5 billion lines in a single file.
+  * uvf searches many files in one run, plain text and seven compressed formats mixed (gz, bz2, xz, lzma, zst, lz4, br), with no external commands. Add -open and the hits appear in the window as file-number:line; double-click to read around a hit.
+  * Encoding auto-detection (UTF-8, Shift_JIS, EUC-JP, UTF-16), bookmarks remembered per file, keyboard shortcuts, real-time tail.
 
-  Run the command as `uwview.uvf` (or set `sudo snap alias uwview.uvf uvf`).
-  The snap reads files in your home folder. For removable media (/media,
-  /mnt), run `sudo snap connect uwview:removable-media`. Files elsewhere,
-  such as /var/log, are not reachable from the snap; copy them under your
-  home folder first.
+  **Setup after install (once)**
 
-  Free for personal and internal company use under the PolyForm Internal Use
-  License 1.0.0. Source: https://github.com/amru195704/UwView
+  Use the command as `uvf`:
+
+      sudo snap alias uwview.uvf uvf
+
+  Read files on USB drives and other removable media (/media, /mnt):
+
+      sudo snap connect uwview:removable-media
+
+  Check: `uvf --version` shows the version. Without the alias, run the command as `uwview.uvf`. To undo the alias: `sudo snap unalias uvf`.
+
+  **Examples**
+
+      uvf 'logs/**/*.log' ERROR
+      uvf 'logs/*.gz' ERROR -open
+
+  Quote file patterns so that uvf, not the shell, expands them. `uwview` opens the GUI.
+
+  **Where the snap can read**
+
+  Files in your home folder, and removable media after the connect command above. Files elsewhere, such as /var/log, are not reachable from the snap; copy them under your home folder first.
+
+  Free for personal and internal company use under the PolyForm Internal Use License 1.0.0. Source: https://github.com/amru195704/UwView
 grade: stable
 confinement: strict
 license: Proprietary
