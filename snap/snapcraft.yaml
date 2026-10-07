@@ -1,7 +1,7 @@
 name: uwview
 title: UwView
 base: core24
-version: '1.7.3.6.9'
+version: '1.8.1.9'
 summary: Open and search huge text and log files — a GUI and the uvf command
 description: |
   UwView is a viewer and search tool for huge text and log files, with a GUI and a command line (uvf) that share one engine.
@@ -51,8 +51,8 @@ parts:
     plugin: dump
     # GitHub Releases の Linux 版をそのまま詰める（ビルドはしない）
     source:
-      - on amd64: https://github.com/amru195704/UwView/releases/download/v1.7.3.6.9/UwView-1.7.3.6.9-linux-x86_64.tar.gz
-      - on arm64: https://github.com/amru195704/UwView/releases/download/v1.7.3.6.9/UwView-1.7.3.6.9-linux-aarch64.tar.gz
+      - on amd64: https://github.com/amru195704/UwView/releases/download/v1.8.1.9/UwView-1.8.1.9-linux-x86_64.tar.gz
+      - on arm64: https://github.com/amru195704/UwView/releases/download/v1.8.1.9/UwView-1.8.1.9-linux-aarch64.tar.gz
     source-type: tar
     organize:
       UwView.Desktop: opt/uwview/UwView.Desktop
