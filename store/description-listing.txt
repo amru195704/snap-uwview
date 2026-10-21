@@ -2,6 +2,7 @@ UwView is a viewer and search tool for huge text and log files, with a GUI and a
 
 * Open a file and scroll to the end at once. The file is never loaded into memory; only the visible lines are drawn. Verified up to 258 GB / 4.5 billion lines in a single file.
 * uvf searches many files in one run, plain text and seven compressed formats mixed (gz, bz2, xz, lzma, zst, lz4, br), with no external commands. Add -open and the hits appear in the window as file-number:line; double-click to read around a hit.
+* Search the text inside Word, Excel and PDF files (.docx, .xlsx, .pdf) too, with uvf or in the window. The text is extracted for reading and searching; the original files are not changed.
 * Encoding auto-detection (UTF-8, Shift_JIS, EUC-JP, UTF-16), bookmarks remembered per file, keyboard shortcuts, real-time tail.
 
 **Setup after install (once)**
