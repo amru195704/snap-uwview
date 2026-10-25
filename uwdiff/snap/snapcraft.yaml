@@ -2,7 +2,7 @@ name: uwdiff
 title: UwDiff
 base: core24
 version: '1.0.0'
-summary: Compare two files or folders in any format or encoding — a GUI and the uvd command
+summary: Compare two files or folders in any format or encoding, with the uvd command
 description: |
   UwDiff compares two files (or two folders) and shows what changed. The GUI (UwDiff) and the command line (uvd) use the same comparison engine.
 
@@ -39,7 +39,7 @@ description: |
   Free for personal and internal company use under the UwDiff License (PolyForm Internal Use 1.0.0 plus a packaging permission). Not open-source software. Source: https://github.com/amru195704/UwDiff
 grade: stable
 confinement: strict
-license: Proprietary
+license: proprietary
 website: https://uvp.y42u.net/en/uwdiff-en/
 source-code: https://github.com/amru195704/UwDiff
 issues: https://github.com/amru195704/UwDiff/issues
