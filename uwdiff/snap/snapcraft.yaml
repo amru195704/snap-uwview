@@ -73,7 +73,6 @@ parts:
 apps:
   uwdiff:
     command: opt/uwdiff/UwDiff
-    desktop: snap/gui/uwdiff.desktop
     extensions: [gnome]
     plugs: [home, removable-media]
   uvd:
