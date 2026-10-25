@@ -39,10 +39,11 @@ description: |
   Free for personal and internal company use under the UwDiff License (PolyForm Internal Use 1.0.0 plus a packaging permission). Not open-source software. Source: https://github.com/amru195704/UwDiff
 grade: stable
 confinement: strict
-license: proprietary
+license: Proprietary
 website: https://uvp.y42u.net/en/uwdiff-en/
 source-code: https://github.com/amru195704/UwDiff
 issues: https://github.com/amru195704/UwDiff/issues
+contact: https://github.com/amru195704/UwDiff/issues
 
 platforms:
   amd64:
