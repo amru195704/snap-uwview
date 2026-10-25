@@ -1,0 +1,83 @@
+name: uwdiff
+title: UwDiff
+base: core24
+version: '1.0.0'
+summary: Compare two files or folders in any format or encoding — a GUI and the uvd command
+description: |
+  UwDiff compares two files (or two folders) and shows what changed. The GUI (UwDiff) and the command line (uvd) use the same comparison engine.
+
+  * Text, compared line by line with the order kept; the output is a unified diff, the same format as `diff -u`.
+  * CSV, TSV and Excel matched by key columns, even when the row order differs; one line per changed cell.
+  * Order-independent comparison, and folder vs folder (only in old, only in new, different, same).
+  * Inside seven compressed formats (gz, bz2, xz, lzma, zst, lz4, br) and the text of Word, Excel and PDF files.
+  * Encodings detected automatically (UTF-8, Shift_JIS/CP932, EUC-JP, UTF-16); old and new may differ.
+  * Add -open and the result appears in the window. Exit codes are the same as diff (0 same, 1 different, 2 error).
+
+  **Setup after install (once)**
+
+  Use the command as `uvd`:
+
+      sudo snap alias uwdiff.uvd uvd
+
+  Read files on USB drives and other removable media (/media, /mnt):
+
+      sudo snap connect uwdiff:removable-media
+
+  Without the alias, run the command as `uwdiff.uvd`. To undo the alias: `sudo snap unalias uvd`.
+
+  **Examples**
+
+      uvd old.log new.log -o changes.diff
+      uvd old.csv new.csv -key id -open
+
+  `uwdiff` opens the GUI.
+
+  **Where the snap can read**
+
+  Files in your home folder, and removable media after the connect command above. Files elsewhere are not reachable from the snap; copy them under your home folder first.
+
+  Free for personal and internal company use under the UwDiff License (PolyForm Internal Use 1.0.0 plus a packaging permission). Not open-source software. Source: https://github.com/amru195704/UwDiff
+grade: stable
+confinement: strict
+license: Proprietary
+website: https://uvp.y42u.net/en/uwdiff-en/
+source-code: https://github.com/amru195704/UwDiff
+issues: https://github.com/amru195704/UwDiff/issues
+
+platforms:
+  amd64:
+  arm64:
+
+parts:
+  uwdiff:
+    plugin: nil
+    # GitHub Releases の Linux 版をそのまま詰める（ビルドはしない）
+    source:
+      - on amd64: https://github.com/amru195704/UwDiff/releases/download/v1.0.0/UwDiff-1.0.0-linux-x86_64.tar.gz
+      - on arm64: https://github.com/amru195704/UwDiff/releases/download/v1.0.0/UwDiff-1.0.0-linux-aarch64.tar.gz
+    source-type: tar
+    # 配布物は UwDiff-<版>/ の下に入っている。展開のしかたで一段下がっていても、いなくても opt/uwdiff に置く
+    override-build: |
+      src="$CRAFT_PART_SRC"
+      for d in "$src"/UwDiff-*/; do [ -f "$d/uvd" ] && src="$d"; done
+      mkdir -p "$CRAFT_PART_INSTALL/opt/uwdiff"
+      cp -a "$src"/. "$CRAFT_PART_INSTALL/opt/uwdiff/"
+      chmod +x "$CRAFT_PART_INSTALL/opt/uwdiff/uvd" "$CRAFT_PART_INSTALL/opt/uwdiff/UwDiff"
+    stage-packages:
+      - libicu74
+      - libx11-6
+      - libice6
+      - libsm6
+      - libfontconfig1
+
+apps:
+  uwdiff:
+    command: opt/uwdiff/UwDiff
+    desktop: snap/gui/uwdiff.desktop
+    extensions: [gnome]
+    plugs: [home, removable-media]
+  uvd:
+    # uvd -open は、同じフォルダの UwDiff を起動する。画面が出るよう uvd にも gnome を付ける
+    command: opt/uwdiff/uvd
+    extensions: [gnome]
+    plugs: [home, removable-media]

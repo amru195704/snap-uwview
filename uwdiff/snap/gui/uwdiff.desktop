@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=UwDiff
+GenericName=File and Folder Comparison
+GenericName[ja]=ファイル・フォルダの比較
+Comment=Compare two files or folders in any format or encoding
+Comment[ja]=2つのファイル・フォルダを、形式や文字コードを問わず比べる
+Exec=uwdiff
+Terminal=false
+Categories=Utility;TextTools;Development;
+Keywords=diff;compare;csv;excel;text;

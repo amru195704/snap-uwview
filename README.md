@@ -38,3 +38,39 @@ GitHub Releases の Linux 版（x86_64・aarch64）をそのまま詰めるだ�
 
 - 読めるのはホームフォルダの下（隠しフォルダを除く）と、connect したときの /media・/mnt。`/var/log` などは読めない。
 - 確かめたのは YAML の書式だけ。snap の作成と起動は、上の 5・6 で初めて確かめることになる。
+
+---
+
+# Snap Store: uwdiff（同じリポで作る2本目の snap）
+
+UwView の姉妹ツール [UwDiff](https://github.com/amru195704/UwDiff)（2つのファイル・フォルダを比べる。コマンド `uvd`）の snap。ストアでは UwView とは**別の snap（名前 `uwdiff`）**になるが、定義と GitHub Actions はこのリポにまとめた。
+
+- 定義: `uwdiff/snap/snapcraft.yaml`・`uwdiff/snap/gui/uwdiff.desktop`（UwView の `snap/` には触らない）
+- ワークフロー: `.github/workflows/workflow-snap-uwdiff.yml`（名前 `snap-uwdiff`・手で走らせる。UwView のタグ `v*` では動かない）
+- 入るもの: アプリ「UwDiff」とコマンド `uwdiff.uvd`（`sudo snap alias uwdiff.uvd uvd` で `uvd` に）
+
+## 初めて出す（1回だけ）
+
+1. **名前の登録**: https://snapcraft.io/register-snap で `uwdiff` を登録する（アカウントは UwView と同じ）。
+2. **送信用の鍵を両方に効くものにする**: 今の鍵は `--snaps=uwview` に限ってあるので、作り直して `SNAPCRAFT_STORE_CREDENTIALS` を上書きする。
+   ```bash
+   snapcraft export-login --snaps=uwview,uwdiff \
+     --acls package_access,package_push,package_update,package_release -
+   ```
+3. **作って送る**: GitHub の Actions → **snap-uwdiff** → Run workflow。amd64・arm64 の2本ができて、Snap Store の **edge** に出る。
+4. **試す**: Ubuntu で `sudo snap install uwdiff --edge` → メニューから起動・`uwdiff.uvd ~/a.log ~/b.log -open`。
+5. **ストアの掲載ページ**: My snaps → uwdiff → Listing で、スクリーンショット・カテゴリ（Utilities／Development）・連絡先。
+6. **公開**: Releases で edge のリビジョンを **stable** に上げる。
+
+あとで頼むとよいこと（store-requests）: `uvd` の自動エイリアス、`removable-media` の自動接続。
+
+## 版を上げるとき
+
+`uwdiff/snap/snapcraft.yaml` の `version` と、`source` の URL 2本の版数を書き換えて commit → Actions の snap-uwdiff を走らせる → edge で試して stable へ。
+
+## 制限・未確認
+
+- 読めるのはホームフォルダの下と、connect したときの /media・/mnt。
+- **アイコンが無い**（UwDiff のリポに画像が無い）。用意できたら `uwdiff/snap/gui/uwdiff.png` に置き、`snapcraft.yaml` に `icon: snap/gui/uwdiff.png`、`.desktop` に `Icon=${SNAP}/meta/gui/uwdiff.png` を足す。
+- UwDiff の配布物は `UwDiff-<版>/` の下に入っている（UwView は直下）。`override-build` でどちらの形でも `opt/uwdiff` に置く。
+- 確かめたのは YAML の書式だけ。snap の作成と起動は、上の 3・4 で初めて確かめる。
