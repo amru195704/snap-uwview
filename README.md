@@ -1,5 +1,65 @@
 # Snap Store: uwview
 
+[English](#english) · [日本語](#日本語)
+
+## English
+
+> **Main repository** (source, releases, docs): https://github.com/amru195704/UwView — this repo only holds the packaging. UwDiff: https://github.com/amru195704/UwDiff
+
+Makes UwView installable from Ubuntu's "Software" app (Snap Store). The snap simply packs the Linux builds (x86_64 / aarch64) from GitHub Releases; nothing is built from source. Building and uploading to the Snap Store run on GitHub Actions (Ubuntu amd64 / arm64 runners), so the whole flow can be driven from a Mac.
+
+What you get: the "UwView" app (menu entry and icon) and the command `uwview.uvf` (`sudo snap alias uwview.uvf uvf` to call it as `uvf`).
+
+### First release (once)
+
+1. **Account**: create an Ubuntu One account at https://snapcraft.io and accept the developer terms.
+2. **Register the name**: register `uwview` at https://snapcraft.io/register-snap.
+3. **Repository**: create `amru195704/snap-uwview` (public) on GitHub. **Move `workflow-snap.yml` to `.github/workflows/snap.yml`** first (it is kept outside `.github` because our content tooling cannot write there), then push the contents of this folder.
+   ```bash
+   mkdir -p .github/workflows && git mv -f workflow-snap.yml .github/workflows/snap.yml 2>/dev/null || mv workflow-snap.yml .github/workflows/snap.yml
+   ```
+4. **Store credentials**: on a Linux box with snapcraft (an Ubuntu VM is fine), run the command below and store the output as the GitHub Actions secret `SNAPCRAFT_STORE_CREDENTIALS` (Settings → Secrets and variables → Actions).
+   ```bash
+   snapcraft export-login --snaps=uwview \
+     --acls package_access,package_push,package_update,package_release -
+   ```
+5. **Build and upload**: GitHub → Actions → snap → Run workflow. Two snaps (amd64, arm64) are built and published to the **edge** channel.
+6. **Test**: on Ubuntu, `sudo snap install uwview --edge`, launch from the menu, and try `uwview.uvf ~/some.log ERROR -open`.
+7. **Store listing**: in the snapcraft.io dashboard (My snaps → uwview → Listing) add screenshots, categories (Utilities / Development) and a contact.
+8. **Publish**: in Releases, promote the edge revision to **stable**. From here it appears in public search.
+
+### Worth asking for later (Snapcraft forum, store-requests)
+
+- Auto-alias for `uvf` (so `uwview.uvf` can be called as `uvf`).
+- Auto-connect of `removable-media` (read external drives without a manual `connect`).
+
+### Bumping the version
+
+Update `version` and the two `source` URLs in `snap/snapcraft.yaml`, commit, run the workflow, test on edge, then promote to stable.
+
+### Limitations (also stated in the store description)
+
+- Readable paths are under the home folder (hidden folders excluded) and /media, /mnt once connected. `/var/log` and the like are not readable.
+- Only the YAML syntax has been verified; building and launching the snap are first exercised in steps 5–6 above.
+
+---
+
+### Snap Store: uwdiff (second snap built from this repo)
+
+The snap for [UwDiff](https://github.com/amru195704/UwDiff), UwView's sister tool for comparing two files or folders (command `uvd`). In the store it is a **separate snap named `uwdiff`**, but its definition and workflow live in this repo.
+
+- Definition: `uwdiff/snap/snapcraft.yaml`, `uwdiff/snap/gui/uwdiff.desktop` (UwView's `snap/` is untouched)
+- Workflow: `.github/workflows/workflow-snap-uwdiff.yml` (named `snap-uwdiff`; run manually, not triggered by UwView's `v*` tags)
+- What you get: the "UwDiff" app and the command `uwdiff.uvd` (`sudo snap alias uwdiff.uvd uvd` to call it as `uvd`)
+
+First release: register `uwdiff` at snapcraft.io (same account); re-export store credentials for both snaps (`--snaps=uwview,uwdiff`) and overwrite `SNAPCRAFT_STORE_CREDENTIALS`; run Actions → **snap-uwdiff**; test with `sudo snap install uwdiff --edge` and `uwdiff.uvd ~/a.log ~/b.log -open`; fill the listing; promote edge to stable. Version bumps work the same way with `uwdiff/snap/snapcraft.yaml`.
+
+Known gaps: no icon yet (add `uwdiff/snap/gui/uwdiff.png`, `icon:` in `snapcraft.yaml` and `Icon=${SNAP}/meta/gui/uwdiff.png` in the `.desktop` once available); UwDiff's release archive unpacks into `UwDiff-<version>/` (UwView unpacks flat), handled in `override-build`; only the YAML syntax has been verified so far.
+
+---
+
+## 日本語
+
 > **本体リポ**（ソース・リリース・ドキュメント）: https://github.com/amru195704/UwView — このリポはパッケージ定義だけです。UwDiff: https://github.com/amru195704/UwDiff
 
 Ubuntu の「ソフトウェア」アプリ（Snap Store）から UwView を入れられるようにする。
