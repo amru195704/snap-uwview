@@ -1,5 +1,7 @@
 # Snap Store: uwview
 
+> **本体リポ**（ソース・リリース・ドキュメント）: https://github.com/amru195704/UwView — このリポはパッケージ定義だけです。UwDiff: https://github.com/amru195704/UwDiff
+
 Ubuntu の「ソフトウェア」アプリ（Snap Store）から UwView を入れられるようにする。
 GitHub Releases の Linux 版（x86_64・aarch64）をそのまま詰めるだけで、ソースからのビルドはしない。
 ビルドと Snap Store への送信は GitHub Actions（Ubuntu の amd64・arm64 ランナー）で行うので、Mac だけで進められる。
